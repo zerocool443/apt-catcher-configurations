@@ -14,3 +14,9 @@ Inside your new file, add a line that says:
 
 
 Acquire::http::Proxy "http://<IP address or hostname of the apt-cacher server>:3142";
+
+
+Alternatively, edit /etc/apt/sources.list so all your HTTP sources are prepended with the address of your apt-cacher machine and the port, like this:
+deb http://example.debian.org/debian unstable main contrib non-free
+becomes
+deb http://sys11:3142/example.debian.org/debian unstable main contrib non-free

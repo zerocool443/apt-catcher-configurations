@@ -1,0 +1,86 @@
+SERVER CONFIGURATIONS :
+
+GENERAL CONFIGURATION FOR SERVER 
+
+1:  install apt-cacher and apache web server 
+
+sudo apt-get install apt-cacher apache2
+
+2: Enable apt-cacher
+
+Edit /etc/default/apt-cacher and change autostart to 1
+
+3:  Restart apache: 
+
+   sudo service apache2 restart
+
+
+
+#Test apt-cacher by pointing your web browser to http://localhost:3142/apt-cacher 
+
+4:
+
+Edit /etc/apt-cacher/apt-cacher.conf Uncomment the following line:
+
+allowed_hosts = * 
+
+
+5 :  Change the admin_email email address to something meaningful.
+
+
+
+6:     If you want to cache multiple distributions, uncomment the line and set distinct_namespaces value to 1:
+
+distinct_namespaces = 1
+
+
+7:
+
+ By default apt-cacher may have problems with upgrades of ubuntu from one version to another when running do-release-upgrade -d This can be fixed by uncommenting the line beginning with installer_files_regexp and modifying it from:
+
+installer_files_regexp = ^(?:vmlinuz|linux|initrd\.gz|changelog|NEWS.Debian|UBUNTU_RELEASE_NAMES\.tar\.gz(?:\.gpg)?|(?:Devel|EOL)?ReleaseAnnouncement(?:\.html)?|meta-release(?:-lts)?(?:-(?:development|proposed))?)$
+
+to:
+
+installer_files_regexp = ^(?:vmlinuz|linux|initrd\.gz|changelog|NEWS.Debian|[a-z]+\.tar\.gz(?:\.gpg)?|UBUNTU_RELEASE_NAMES\.tar\.gz(?:\.gpg)?|(?:Devel|EOL)?ReleaseAnnouncement(?:\.html)?|meta-release(?:-lts)?(?:-(?:development|proposed))?)$
+
+
+
+
+
+8:
+
+Restart apt-cacher: 
+
+   sudo service apt-cacher restart
+
+
+
+
+Import any existing packages into the cache by creating symlinks:
+
+   sudo /usr/share/apt-cacher/apt-cacher-import.pl -l /var/cache/apt/archives
+
+
+Configure the server's Apt process to run through the cache
+
+
+sudo nano /etc/apt/apt.conf.d/01proxy
+Inside your new file, add a line that says:
+
+
+Acquire::http::Proxy "http://<IP address or hostname of the apt-cacher server>:3142";
+
+
+Save the file and then on the server run  apt-get update  
+
+If that succeeds without errors then update your server with  apt-get dist-upgrade  
+
+
+
+
+
+
+
+
+

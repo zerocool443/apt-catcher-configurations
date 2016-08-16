@@ -1,0 +1,16 @@
+ Use as a proxy to APT
+
+
+
+
+1:  In a terminal, type:
+
+
+sudo nano /etc/apt/apt.conf.d/01proxy
+
+
+
+Inside your new file, add a line that says:
+
+
+Acquire::http::Proxy "http://<IP address or hostname of the apt-cacher server>:3142";
